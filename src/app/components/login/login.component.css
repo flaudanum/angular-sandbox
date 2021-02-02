@@ -1,0 +1,10 @@
+/* body {
+    background: url(/src/assets/pictures/login-background.jpg);
+    background-size: cover;
+    background-color: red;
+} */
+
+.container {
+  width: 35%;
+  margin: 150px auto;
+}

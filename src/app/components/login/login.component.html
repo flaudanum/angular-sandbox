@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row card hoverable">
+    <div class="card-content">
+      <h1 class="card-title">Sign in</h1>
+
+      <form class="row s12" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+          <!-- Login input -->
+          <div class="input-field col s12">
+            <input
+              placeholder="Login"
+              id="login"
+              type="text"
+              class="validate"
+              name="login"
+              ngModel
+            />
+            <label for="login">Login</label>
+          </div>
+    
+          <!-- Password input -->
+          <div class="input-field col s12">
+            <input
+              placeholder="Password"
+              id="login"
+              type="password"
+              class="validate"
+              name="password"
+              ngModel
+            />
+            <label for="password">Password</label>
+          </div>
+    
+          <!-- Submit button -->
+          <div class="col s12 center-align">
+            <button
+              class="btn waves-effect waves-light"
+              type="submit"
+              name="action"
+            >
+              Sign in
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
+
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sign-in',
@@ -9,9 +15,37 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    router.events
+      .pipe(
+        filter(
+          (event) =>
+            event instanceof NavigationEnd || event instanceof NavigationCancel
+        )
+      )
+      .subscribe((event) => {
+        const initialUrl = router.getCurrentNavigation().initialUrl.toString();
+        const finalUrl = router.getCurrentNavigation().finalUrl.toString();
 
-  ngOnInit(): void {
+        const isNavigated: boolean =
+          event instanceof NavigationEnd && finalUrl === '/sign-in';
+        const isRedirected: boolean =
+          event instanceof NavigationCancel && initialUrl === '/sign-in';
+        const isExiting: boolean =
+          event instanceof NavigationEnd && initialUrl == '/sign-in';
+
+        // Explicit navigation
+        if (isNavigated || isRedirected) {
+          this.setBackgroundImage();
+        }
+        if (isExiting) {
+          this.removeBackgroundImage();
+        }
+      });
+  }
+
+  private setBackgroundImage() {
+    console.log('setBackgroundImage');
     // Sets a background image for sign in page
     const bodyElt = document.getElementsByTagName('body')[0];
     bodyElt.style.backgroundImage =
@@ -19,10 +53,19 @@ export class SignInComponent implements OnInit {
     bodyElt.style.backgroundSize = 'cover';
   }
 
-  onSubmit(signInForm: NgForm) {
+  private removeBackgroundImage() {
+    console.log('removeBackgroundImage');
     // Removes the background image of sign in page
     const bodyElt = document.getElementsByTagName('body')[0];
     bodyElt.style.backgroundImage = 'none';
+  }
+
+  ngOnInit(): void {
+    this.setBackgroundImage();
+  }
+
+  onSubmit(signInForm: NgForm) {
+    this.removeBackgroundImage();
 
     this.router.navigate([''], {
       state: {
@@ -30,13 +73,5 @@ export class SignInComponent implements OnInit {
         password: signInForm.value.password,
       },
     });
-
-    // const service = new AuthenticationService()
-    // service.login({
-    //   login: signInForm.value.login,
-    //   password: signInForm.value.password
-    // }).then((isLogged: Boolean) => {
-    //   console.log("You are logged: " + isLogged)
-    //   }).catch(err => console.error(err))
   }
 }

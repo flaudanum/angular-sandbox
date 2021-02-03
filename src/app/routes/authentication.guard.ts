@@ -31,7 +31,8 @@ export class AuthenticationGuard implements CanActivate {
       return isAuthenticated;
     } else {
       // If the user is not authenticated then navigate to the sign-in page
-      this.router.navigate(['sing-in']);
+      console.log("AuthenticationGuard redirection to sign-in")
+      this.router.navigate(['sign-in']);
     }
   }
 }

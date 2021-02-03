@@ -7,11 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit {
-  constructor(private router: Router) {
-    console.log(this.router.getCurrentNavigation().extras.state)
-  }
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

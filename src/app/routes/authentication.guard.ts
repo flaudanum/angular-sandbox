@@ -19,8 +19,9 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     // Gets the state in the route
-    const routeState = this.router.getCurrentNavigation().extras
-      .state as SignInCredentialsModel;
+    const routeState = <SignInCredentialsModel>(
+      this.router.getCurrentNavigation().extras?.state
+    ) ?? { login: '', password: '' };
 
     // Checks for authentication
     this.authenticationService

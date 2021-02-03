@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
+import { SignInCredentialsModel } from 'src/app/models/sign-in-credentials-model';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
@@ -25,8 +26,8 @@ export class SignInComponent implements OnInit {
         )
       )
       .subscribe((event) => {
-        const initialUrl = router.getCurrentNavigation().initialUrl.toString();
-        const finalUrl = router.getCurrentNavigation().finalUrl.toString();
+        const initialUrl = router.getCurrentNavigation().initialUrl?.toString();
+        const finalUrl = router.getCurrentNavigation().finalUrl?.toString();
 
         const isNavigated: boolean =
           event instanceof NavigationEnd && finalUrl === '/sign-in';
@@ -37,7 +38,10 @@ export class SignInComponent implements OnInit {
 
         // Explicit navigation
         if (isNavigated || isRedirected) {
-          this.setBackgroundImage();
+          this.navigateToMainView({ login: '', password: '' }, () => {
+            console.log('REJECT');
+            this.setBackgroundImage();
+          });
         }
         if (isExiting) {
           this.removeBackgroundImage();
@@ -69,17 +73,26 @@ export class SignInComponent implements OnInit {
       password: signInForm.value.password,
     };
 
+    this.navigateToMainView(credentials, () => {
+      this.authenticationFailed = true;
+    });
+  }
+
+  navigateToMainView(
+    credentials: SignInCredentialsModel,
+    rejectCallback: () => void
+  ) {
     this.authenticationService
       .login(credentials)
       .subscribe((isAuthenticated) => {
         if (isAuthenticated) {
-          this.removeBackgroundImage();
+          // this.removeBackgroundImage();
 
           this.router.navigate([''], {
             state: credentials,
           });
         } else {
-          this.authenticationFailed = true;
+          rejectCallback();
         }
       });
   }

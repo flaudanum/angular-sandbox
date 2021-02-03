@@ -4,7 +4,6 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   Router,
-  RouterState,
 } from '@angular/router';
 import { SignInCredentialsModel } from '../models/sign-in-credentials-model';
 import { AuthenticationService } from '../services/authentication.service';

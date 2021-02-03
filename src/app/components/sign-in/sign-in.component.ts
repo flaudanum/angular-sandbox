@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationStart,
-  Router,
-} from '@angular/router';
+import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
 

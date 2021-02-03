@@ -1,4 +1,4 @@
 export interface SignInCredentialsModel {
-  login: string,
+  login: string;
   password: string;
 }

@@ -40,7 +40,6 @@ export class SignInComponent implements OnInit {
   }
 
   private setBackgroundImage() {
-    console.log('setBackgroundImage');
     // Sets a background image for sign in page
     const bodyElt = document.getElementsByTagName('body')[0];
     bodyElt.style.backgroundImage =
@@ -49,7 +48,6 @@ export class SignInComponent implements OnInit {
   }
 
   private removeBackgroundImage() {
-    console.log('removeBackgroundImage');
     // Removes the background image of sign in page
     const bodyElt = document.getElementsByTagName('body')[0];
     bodyElt.style.backgroundImage = 'none';

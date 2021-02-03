@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebStorageService {
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Clears the web session storage
@@ -16,5 +15,10 @@ export class WebStorageService {
 
   setItem(key: string, value: string) {
     sessionStorage.setItem(key, value);
+  }
+
+  getItem(key: string) {
+    console.log(sessionStorage.getItem(key));
+    return sessionStorage.getItem(key);
   }
 }

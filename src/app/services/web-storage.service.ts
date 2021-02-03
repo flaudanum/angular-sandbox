@@ -18,7 +18,6 @@ export class WebStorageService {
   }
 
   getItem(key: string) {
-    console.log(sessionStorage.getItem(key));
     return sessionStorage.getItem(key);
   }
 }

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,7 +11,12 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent implements OnInit {
-  constructor(private router: Router) {
+  authenticationFailed = false;
+
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
     router.events
       .pipe(
         filter(
@@ -58,13 +64,23 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(signInForm: NgForm) {
-    this.removeBackgroundImage();
+    const credentials = {
+      login: signInForm.value.login,
+      password: signInForm.value.password,
+    };
 
-    this.router.navigate([''], {
-      state: {
-        login: signInForm.value.login,
-        password: signInForm.value.password,
-      },
-    });
+    this.authenticationService
+      .login(credentials)
+      .subscribe((isAuthenticated) => {
+        if (isAuthenticated) {
+          this.removeBackgroundImage();
+
+          this.router.navigate([''], {
+            state: credentials,
+          });
+        } else {
+          this.authenticationFailed = true;
+        }
+      });
   }
 }

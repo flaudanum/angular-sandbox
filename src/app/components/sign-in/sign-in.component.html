@@ -48,4 +48,8 @@
       </form>
     </div>
   </div>
+
+  <div *ngIf="authenticationFailed" class="row card red darken-2">
+    <div class="card-content center-align"><h5>Bad Credentials</h5></div>
+  </div>
 </div>

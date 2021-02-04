@@ -46,8 +46,6 @@ export class SignInComponent implements OnInit {
 
         // Explicit navigation
         if (isNavigated || isRedirected) {
-          console.log('isNavigated: ' + isNavigated);
-          console.log('isRedirected: ' + isRedirected);
           this.navigateToMainView({ login: '', password: '' }, () => {
             this.setBackgroundImage();
           });
@@ -95,19 +93,13 @@ export class SignInComponent implements OnInit {
   ) {
     const obs = this.authenticationService.login(credentials);
     obs.subscribe((isAuthenticated) => {
-      console.log('in subscription');
-
       if (isAuthenticated) {
-        console.log('is Authenticated');
-
         this.router.navigate([''], {
           state: credentials,
         });
       } else {
-        console.log('is rejected: ' + rejectCallback);
         rejectCallback();
       }
     });
-    console.log('navigateToMainView:', credentials, obs);
   }
 }

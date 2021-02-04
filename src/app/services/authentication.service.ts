@@ -45,11 +45,17 @@ export class AuthenticationService {
     });
   }
 
+  signOut(): Observable<boolean> {
+    return new Observable((subscriber) => {
+      this.storageService.clearStorage();
+      subscriber.next(true);
+    });
+  }
+
   private validateCredentials(
     credentials: SignInCredentialsModel,
     subscriber: Subscriber<boolean>
   ) {
-    console.log('AuthenticationService.validateCredentials:', credentials);
     // The passwords match
     if (users.get(credentials.login) === credentials.password) {
       this.getToken(credentials.login).then((token) => {

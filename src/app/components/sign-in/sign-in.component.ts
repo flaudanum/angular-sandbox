@@ -18,7 +18,11 @@ export class SignInComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService
   ) {
-    router.events
+    this.subscribeToNavigationEvents();
+  }
+
+  private subscribeToNavigationEvents() {
+    this.router.events
       .pipe(
         filter(
           (event) =>
@@ -26,8 +30,12 @@ export class SignInComponent implements OnInit {
         )
       )
       .subscribe((event) => {
-        const initialUrl = router.getCurrentNavigation().initialUrl?.toString();
-        const finalUrl = router.getCurrentNavigation().finalUrl?.toString();
+        const initialUrl = this.router
+          .getCurrentNavigation()
+          .initialUrl?.toString();
+        const finalUrl = this.router
+          .getCurrentNavigation()
+          .finalUrl?.toString();
 
         const isNavigated: boolean =
           event instanceof NavigationEnd && finalUrl === '/sign-in';
@@ -38,8 +46,9 @@ export class SignInComponent implements OnInit {
 
         // Explicit navigation
         if (isNavigated || isRedirected) {
+          console.log('isNavigated: ' + isNavigated);
+          console.log('isRedirected: ' + isRedirected);
           this.navigateToMainView({ login: '', password: '' }, () => {
-            console.log('REJECT');
             this.setBackgroundImage();
           });
         }
@@ -48,6 +57,8 @@ export class SignInComponent implements OnInit {
         }
       });
   }
+
+  private subscribeToLogin() {}
 
   private setBackgroundImage() {
     // Sets a background image for sign in page
@@ -82,18 +93,21 @@ export class SignInComponent implements OnInit {
     credentials: SignInCredentialsModel,
     rejectCallback: () => void
   ) {
-    this.authenticationService
-      .login(credentials)
-      .subscribe((isAuthenticated) => {
-        if (isAuthenticated) {
-          // this.removeBackgroundImage();
+    const obs = this.authenticationService.login(credentials);
+    obs.subscribe((isAuthenticated) => {
+      console.log('in subscription');
 
-          this.router.navigate([''], {
-            state: credentials,
-          });
-        } else {
-          rejectCallback();
-        }
-      });
+      if (isAuthenticated) {
+        console.log('is Authenticated');
+
+        this.router.navigate([''], {
+          state: credentials,
+        });
+      } else {
+        console.log('is rejected: ' + rejectCallback);
+        rejectCallback();
+      }
+    });
+    console.log('navigateToMainView:', credentials, obs);
   }
 }

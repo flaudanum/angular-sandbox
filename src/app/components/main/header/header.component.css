@@ -1,4 +1,8 @@
+#home-logo {
+  height: 50px;
+  padding: 14px 20px 0 10px;
+}
+
 #logout {
-  justify-content: center;
   padding: 7px 20px 0 20px;
 }

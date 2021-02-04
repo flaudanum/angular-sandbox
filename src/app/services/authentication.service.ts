@@ -49,6 +49,7 @@ export class AuthenticationService {
     credentials: SignInCredentialsModel,
     subscriber: Subscriber<boolean>
   ) {
+    console.log('AuthenticationService.validateCredentials:', credentials);
     // The passwords match
     if (users.get(credentials.login) === credentials.password) {
       this.getToken(credentials.login).then((token) => {
@@ -62,6 +63,8 @@ export class AuthenticationService {
         this.storageService.setItem('app-AUTH', JSON.stringify(authData));
         subscriber.next(true);
       });
+    } else {
+      subscriber.next(false);
     }
   }
 

@@ -22,12 +22,14 @@ const fakeToken =
   providedIn: 'root',
 })
 export class AuthenticationService {
+  private static webStorageNames = new Map([['AUTH', 'sandbox-AUTH']]);
+
   constructor(private storageService: WebStorageService) {}
 
   login(credentials: SignInCredentialsModel | undefined): Observable<boolean> {
     return new Observable((subscriber) => {
       // Authentication data are stored
-      if (this.storageService.getItem('app-AUTH')) {
+      if (this.storageService.getItem(this.getStorageName('AUTH'))) {
         this.checkTokenInStorage(subscriber);
       }
 
@@ -52,6 +54,14 @@ export class AuthenticationService {
     });
   }
 
+  private getStorageName(name: string) {
+    if (AuthenticationService.webStorageNames.has(name)) {
+      return AuthenticationService.webStorageNames.get(name);
+    } else {
+      throw Error(`Unregistered web storage name: ${name}`);
+    }
+  }
+
   private validateCredentials(
     credentials: SignInCredentialsModel,
     subscriber: Subscriber<boolean>
@@ -66,7 +76,10 @@ export class AuthenticationService {
         };
 
         this.storageService.clearStorage();
-        this.storageService.setItem('app-AUTH', JSON.stringify(authData));
+        this.storageService.setItem(
+          this.getStorageName('AUTH'),
+          JSON.stringify(authData)
+        );
         subscriber.next(true);
       });
     } else {
@@ -76,7 +89,7 @@ export class AuthenticationService {
 
   private checkTokenInStorage(subscriber: Subscriber<boolean>) {
     const authData = <AuthStorageModel>(
-      JSON.parse(this.storageService.getItem('app-AUTH'))
+      JSON.parse(this.storageService.getItem(this.getStorageName('AUTH')))
     );
     if (this.checkToken(authData.token)) {
       subscriber.next(true);

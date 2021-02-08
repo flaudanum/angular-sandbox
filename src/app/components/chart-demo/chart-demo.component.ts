@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-// this is the global hook to the bokehjs lib (without types)
-// import { Data, plot } from 'plotly.js';
 declare var Plotly: any;
 
 @Component({

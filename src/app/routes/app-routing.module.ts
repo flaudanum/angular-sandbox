@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChartDemoComponent } from '../components/chart-demo/chart-demo.component';
+import { ChartDemoComponent } from '../charts-module/chart-demo/chart-demo.component';
 import { SignInComponent } from '../components/sign-in/sign-in.component';
 import { UnderConstructionComponent } from '../components/under-construction/under-construction.component';
 import { MainComponent } from '../layout-module/main/main.component';

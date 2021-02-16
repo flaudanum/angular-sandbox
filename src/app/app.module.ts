@@ -6,23 +6,19 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { SignInComponent } from './components/sign-in/sign-in.component';
-import { ChartDemoComponent } from './components/chart-demo/chart-demo.component';
 import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 import { LayoutModule } from './layout-module/layout.module';
+import { ChartsModule } from './charts-module/charts.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SignInComponent,
-    ChartDemoComponent,
-    UnderConstructionComponent,
-  ],
+  declarations: [AppComponent, SignInComponent, UnderConstructionComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
     LayoutModule,
+    ChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

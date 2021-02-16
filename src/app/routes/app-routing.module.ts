@@ -7,8 +7,8 @@ import { SignInComponent } from '../components/sign-in/sign-in.component';
 import { UnderConstructionComponent } from '../components/under-construction/under-construction.component';
 import { MainComponent } from '../layout-module/main/main.component';
 
-import { ChartDemoComponent } from '../charts-module/chart-demo/chart-demo.component';
-import { ChartjsDemoComponent } from '../charts-module/chartjs-demo/chartjs-demo.component';
+import { ChartDemoComponent } from '../charts-module/components/chart-demo/chart-demo.component';
+import { ChartjsDemoComponent } from '../charts-module/components/chartjs-demo/chartjs-demo.component';
 
 const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },

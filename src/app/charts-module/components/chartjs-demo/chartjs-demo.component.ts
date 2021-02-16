@@ -13,8 +13,7 @@ export class ChartjsDemoComponent implements OnInit {
     const contextElt = document.getElementById(
       'chartjs-demo'
     ) as HTMLCanvasElement;
-    const context = contextElt.getContext('2d');
-    const myChart = new Chart(context, {
+    const myChart = new Chart('chartjs-demo', {
       type: 'bar',
       data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],

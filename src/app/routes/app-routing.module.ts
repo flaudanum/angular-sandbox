@@ -9,6 +9,7 @@ import { MainComponent } from '../layout-module/main/main.component';
 
 import { ChartDemoComponent } from '../charts-module/components/chart-demo/chart-demo.component';
 import { ChartjsDemoComponent } from '../charts-module/components/chartjs-demo/chartjs-demo.component';
+import { ModernaStockPriceComponent } from '../charts-module/components/moderna-stock-price/moderna-stock-price.component';
 
 const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
     children: [
       { path: 'chart-demo', component: ChartDemoComponent },
       { path: 'chartjs-demo', component: ChartjsDemoComponent },
+      { path: 'moderna-stock-price', component: ModernaStockPriceComponent },
       { path: 'menu3', component: UnderConstructionComponent },
       { path: '**', redirectTo: 'chart-demo', pathMatch: 'full' },
     ],

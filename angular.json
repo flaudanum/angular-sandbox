@@ -22,12 +22,14 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
-              "node_modules/materialize-css/dist/css/materialize.css"
+              "node_modules/materialize-css/dist/css/materialize.css",
+              "./node_modules/chart.js/dist/Chart.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
               "node_modules/materialize-css/dist/js/materialize.min.js",
-              "./node_modules/plotly.js/dist/plotly.min.js"
+              "./node_modules/plotly.js/dist/plotly.min.js",
+              "./node_modules/chart.js/dist/Chart.min.js"
             ]
           },
           "configurations": {

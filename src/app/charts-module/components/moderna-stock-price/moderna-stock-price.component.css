@@ -1,0 +1,11 @@
+.btn {
+  width: 80%;
+  margin: 20px 0 20px 0;
+  /* justify-content: center; */
+}
+
+.btn-pushed {
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
+  box-shadow: none;
+}

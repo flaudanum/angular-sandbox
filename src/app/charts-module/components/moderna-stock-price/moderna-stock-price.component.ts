@@ -1,9 +1,73 @@
 import { Component, OnInit } from '@angular/core';
 import { ModernaDataService } from '../../services/moderna-data.service';
 import { StockPriceData } from '../../services/stock-price-data';
-import { Chart, ChartPoint } from 'chart.js';
+import { Chart, ChartPoint, ChartDataSets, ChartOptions } from 'chart.js';
 import { zip } from 'src/app/shared/utils';
-// declare const Chart: any;
+
+type ChartTag = 'opening' | 'low' | 'high' | 'closing';
+
+interface Setting {
+  label: string;
+  borderColor: string;
+}
+
+interface ChartsSettings {
+  opening: Setting;
+  low: Setting;
+  high: Setting;
+  closing: Setting;
+}
+
+const chartsSettings: ChartsSettings = {
+  opening: {
+    label: 'Opening',
+    borderColor: '#00662aff',
+  },
+  low: {
+    label: 'Low',
+    borderColor: '#0050dbff',
+  },
+  high: {
+    label: 'High',
+    borderColor: '#eb0000ff',
+  },
+  closing: {
+    label: 'Closing',
+    borderColor: '#660099ff',
+  },
+};
+
+const chartOptions: ChartOptions = {
+  title: {
+    text: 'Moderna Stock Price History',
+    display: true,
+    position: 'bottom',
+    fontSize: 24,
+  },
+  legend: {
+    display: true,
+    position: 'top',
+    align: 'center',
+  },
+  scales: {
+    xAxes: [
+      {
+        type: 'time',
+        time: {
+          unit: 'month',
+        },
+      },
+    ],
+  },
+};
+
+const baseDataset = {
+  pointRadius: 0,
+  borderWidth: 1.5,
+  showLine: true,
+  fill: false,
+  lineTension: 0.1,
+};
 
 @Component({
   selector: 'app-moderna-stock-price',
@@ -11,16 +75,34 @@ import { zip } from 'src/app/shared/utils';
   styleUrls: ['./moderna-stock-price.component.css'],
 })
 export class ModernaStockPriceComponent implements OnInit {
-  private _data: (number | number[])[] | ChartPoint[];
-  private _chart: any;
+  // private _data: (number | number[])[] | ChartPoint[];
+  private _chart: Chart;
+
+  showCharts = {
+    opening: true,
+    low: true,
+    high: true,
+    closing: true,
+  };
+
+  rawData: StockPriceData;
 
   constructor(private _dataService: ModernaDataService) {
-    this.updateData();
+    this.rawData = this._dataService.data;
   }
 
-  private updateData() {
-    const rawData: StockPriceData = this._dataService.data;
-    this._data = zip([rawData.date, rawData.open]).map((pair) => {
+  ngOnInit(): void {
+    this._chart = new Chart('moderna-stock-chart', {
+      type: 'line',
+      data: {
+        datasets: this.getDatasets(),
+      },
+      options: chartOptions,
+    });
+  }
+
+  private getFormattedData(chartTag: ChartTag): ChartPoint[] {
+    return zip([this.rawData.date, this.rawData[chartTag]]).map((pair) => {
       return {
         t: new Date(pair[0]),
         y: pair[1],
@@ -28,43 +110,35 @@ export class ModernaStockPriceComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this._chart = new Chart('moderna-stock-chart', {
-      type: 'line',
-      data: {
-        datasets: [
-          {
-            label: 'Moderna Stock Price',
-            backgroundColor: '##009900FF',
-            borderColor: '#505050FF',
-            pointRadius: 0,
-            borderWidth: 1,
-            showLine: true,
-            fill: false,
-            // No Bezier interpolation
-            lineTension: 0.1,
-            data: this._data,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          title: {
-            text: 'Time Scale',
-            display: true,
-          },
-        },
-        scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                unit: 'month',
-              },
-            },
-          ],
-        },
-      },
-    });
+  private getDatasets(): ChartDataSets[] {
+    const datasets: ChartDataSets[] = [];
+    let dataset: ChartDataSets;
+
+    Object.entries(chartsSettings).forEach(
+      ([chartTag, props]: [ChartTag, Setting]) => {
+        // The chart is not displayed
+        if (!this.showCharts[chartTag]) {
+          return;
+        }
+
+        // Sets the chart's dataset
+        dataset = {
+          ...baseDataset,
+          ...props,
+          data: this.getFormattedData(chartTag),
+        };
+
+        // Registers the chart's dataset
+        datasets.push(dataset);
+      }
+    );
+
+    return datasets;
+  }
+
+  toggleChart(chartTag: ChartTag): void {
+    this.showCharts[chartTag] = !this.showCharts[chartTag];
+    this._chart.data.datasets = this.getDatasets();
+    this._chart.update();
   }
 }

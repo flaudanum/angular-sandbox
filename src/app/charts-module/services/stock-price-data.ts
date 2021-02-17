@@ -1,8 +1,8 @@
 export interface StockPriceData {
   date: string[];
-  open: number[];
+  opening: number[];
   high: number[];
   low: number[];
-  close: number[];
+  closing: number[];
   volume: number[];
 }

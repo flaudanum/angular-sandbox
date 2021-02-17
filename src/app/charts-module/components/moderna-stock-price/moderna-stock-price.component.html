@@ -1,3 +1,37 @@
 <div class="chart-container container">
-  <canvas id="moderna-stock-chart" width="400" height="200"></canvas>
+  <div class="row valign-wrapper">
+    <div class="col s2">
+      <div
+        class="waves-effect waves-light btn green accent-4"
+        (click)="toggleChart('opening')"
+        [ngClass]="{ 'btn-pushed': showCharts['opening'] }"
+      >
+        Opening
+      </div>
+      <div
+        class="waves-effect waves-light btn blue accent-2"
+        (click)="toggleChart('low')"
+        [ngClass]="{ 'btn-pushed': showCharts['low'] }"
+      >
+        Low values
+      </div>
+      <div
+        class="waves-effect waves-light btn red accent-2"
+        (click)="toggleChart('high')"
+        [ngClass]="{ 'btn-pushed': showCharts['high'] }"
+      >
+        High values
+      </div>
+      <div
+        class="waves-effect waves-light btn purple accent-4"
+        (click)="toggleChart('closing')"
+        [ngClass]="{ 'btn-pushed': showCharts['closing'] }"
+      >
+        Closing
+      </div>
+    </div>
+    <div class="col s10">
+      <canvas id="moderna-stock-chart" width="400" height="280"></canvas>
+    </div>
+  </div>
 </div>

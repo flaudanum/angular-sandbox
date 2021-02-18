@@ -31,7 +31,21 @@
       </div>
     </div>
     <div class="col s10">
+      <!-- Displays the chart -->
       <canvas id="moderna-stock-chart" width="400" height="280"></canvas>
+      <div
+        class="waves-effect waves-light btn grey margin-chart-view btn-chart-view"
+        (click)="resetZoom()"
+      >
+        Reset Zoom
+      </div>
+      <div
+        class="waves-effect waves-light btn grey margin-chart-view btn-chart-view"
+        (click)="toggleZoomMode()"
+        [ngClass]="{ 'btn-pushed': zoomDragMode }"
+      >
+        <i class="material-icons right">highlight_alt</i> Zoom
+      </div>
     </div>
   </div>
 </div>

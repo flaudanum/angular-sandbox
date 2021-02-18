@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ModernaDataService } from '../../services/moderna-data.service';
 import { StockPriceData } from '../../services/stock-price-data';
-import { Chart, ChartPoint, ChartDataSets, ChartOptions } from 'chart.js';
+import {
+  Chart,
+  ChartPoint,
+  ChartDataSets,
+  ChartOptions,
+  ChartXAxe,
+  ChartYAxe,
+} from 'chart.js';
 import 'chartjs-plugin-zoom';
 import { zip } from 'src/app/shared/utils';
 
@@ -17,6 +24,14 @@ interface ChartsSettings {
   low: Setting;
   high: Setting;
   closing: Setting;
+}
+
+/**
+ * This interface is needed because plugin chart-plugin-zoom modifies class Chart dynamically which
+ * cannot be detected by the TypeScript compiler
+ */
+interface ChartZoom extends Chart {
+  resetZoom: () => void;
 }
 
 const chartsSettings: ChartsSettings = {
@@ -54,9 +69,6 @@ const chartOptions: ChartOptions = {
     xAxes: [
       {
         type: 'time',
-        time: {
-          unit: 'month',
-        },
       },
     ],
     yAxes: [
@@ -83,17 +95,6 @@ const chartOptions: ChartOptions = {
         //   },
         mode: 'xy',
 
-        rangeMin: {
-          // Format of min pan range depends on scale type
-          x: null,
-          y: null,
-        },
-        rangeMax: {
-          // Format of max pan range depends on scale type
-          x: null,
-          y: null,
-        },
-
         // On category scale, factor of pan velocity
         speed: 20,
 
@@ -106,7 +107,7 @@ const chartOptions: ChartOptions = {
         // Boolean to enable zooming
         enabled: true,
 
-        // Enable drag-to-zoom behavior
+        // Enable drag-to-zoom behavior (does not work properly)
         drag: false,
 
         // Zooming directions. Remove the appropriate direction to disable
@@ -157,16 +158,34 @@ export class ModernaStockPriceComponent implements OnInit {
 
   rawData: StockPriceData;
 
+  zoomDragMode = false;
+
   constructor(private _dataService: ModernaDataService) {
     this.rawData = this._dataService.data;
   }
 
   ngOnInit(): void {
-    const options = { ...chartOptions };
+    let options: ChartOptions = { ...chartOptions };
     if (!options.plugins) {
-      throw new Error('SANDBOX: chartOptions.plugins is undefined');
+      throw new Error('chartOptions.plugins is undefined');
     }
 
+    options = this.setRanges(options);
+
+    this._chart = new Chart('moderna-stock-chart', {
+      type: 'line',
+      data: {
+        datasets: this.getDatasets(),
+      },
+      options,
+    });
+  }
+
+  /**
+   * Sets ranges chart's ticks and zoom/pan limits
+   * @param options chart options object
+   */
+  private setRanges(options: ChartOptions) {
     // Time data range
     const datesRange: [number, number] = this._dataService.datesRange;
 
@@ -175,6 +194,12 @@ export class ModernaStockPriceComponent implements OnInit {
 
     // Upper bound computed with an axe ticks' step size of 20
     const priceUpperBound = Math.ceil(pricesRange[1] / 20) * 20;
+
+    if (!options.plugins) {
+      throw new Error('options.plugins is undefined');
+    }
+
+    /*      Zoom / Pan range      */
 
     options.plugins.zoom.pan.rangeMin = {
       // Format of min pan range depends on scale type
@@ -197,13 +222,20 @@ export class ModernaStockPriceComponent implements OnInit {
       y: priceUpperBound,
     };
 
-    this._chart = new Chart('moderna-stock-chart', {
-      type: 'line',
-      data: {
-        datasets: this.getDatasets(),
-      },
-      options,
-    });
+    /*      Axis ranges      */
+    if (!options.scales?.xAxes) {
+      throw new Error('');
+    }
+    (options.scales?.xAxes as ChartXAxe[])[0].ticks = {
+      min: datesRange[0],
+      max: datesRange[1],
+    };
+    (options.scales?.yAxes as ChartXAxe[])[0].ticks = {
+      min: 0,
+      max: priceUpperBound,
+    };
+
+    return options;
   }
 
   private getFormattedData(chartTag: ChartTag): ChartPoint[] {
@@ -248,5 +280,35 @@ export class ModernaStockPriceComponent implements OnInit {
     }
     this._chart.data.datasets = this.getDatasets();
     this._chart.update();
+  }
+
+  resetZoom() {
+    if (!this._chart) {
+      throw new Error('Chart is undefined');
+    }
+    (this._chart as ChartZoom).resetZoom();
+  }
+
+  /**
+   * Define zooming area with drag and drop
+   */
+  toggleZoomMode() {
+    if (
+      !(
+        this._chart?.options.plugins &&
+        'drag' in this._chart?.options.plugins?.zoom.zoom &&
+        'enabled' in this._chart?.options.plugins?.zoom.pan
+      )
+    ) {
+      throw new Error('Missing plugin option');
+    }
+
+    this._chart.options.plugins.zoom.zoom.drag = !this._chart.options.plugins
+      .zoom.zoom.drag;
+
+    this._chart.options.plugins.zoom.pan.enabled = !this._chart.options.plugins
+      .zoom.pan.enabled;
+
+    this.zoomDragMode = !this.zoomDragMode;
   }
 }

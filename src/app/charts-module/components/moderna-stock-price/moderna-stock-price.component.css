@@ -4,8 +4,19 @@
   /* justify-content: center; */
 }
 
+.margin-chart-view {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.btn-chart-view {
+  color: black;
+  width: auto;
+  text-transform: none;
+}
+
 .btn-pushed {
-  color: #bdbdbd;
-  border: 1px solid #bdbdbd;
+  color: black;
+  border: 1px solid black;
   box-shadow: none;
 }

@@ -168,7 +168,6 @@ const baseDataset = {
   styleUrls: ['./moderna-stock-price.component.css'],
 })
 export class ModernaStockPriceComponent implements OnInit {
-  // private _data: (number | number[])[] | ChartPoint[];
   private _chart: Chart | undefined;
 
   showCharts = {
@@ -197,7 +196,7 @@ export class ModernaStockPriceComponent implements OnInit {
   private getFormattedData(chartTag: ChartTag): ChartPoint[] {
     return zip([this.rawData.date, this.rawData[chartTag]]).map((pair) => {
       return {
-        t: new Date(pair[0]),
+        t: pair[0],
         y: pair[1],
       } as ChartPoint;
     });

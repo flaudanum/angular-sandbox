@@ -11,8 +11,18 @@ export class ModernaDataService {
   }
 
   private _data: StockPriceData;
+  private _dateRange: [number, number];
 
   constructor() {
-    this._data = modernaStockPriceData;
+    const dtObject = modernaStockPriceData;
+    this._data = {
+      date: dtObject.date.map((strDate) => new Date(strDate)),
+      opening: dtObject.opening,
+      low: dtObject.low,
+      high: dtObject.high,
+      closing: dtObject.closing,
+      volume: dtObject.volume,
+    };
+    this._dateRange = [0, 0];
   }
 }

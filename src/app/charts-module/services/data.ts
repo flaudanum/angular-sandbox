@@ -1,6 +1,4 @@
-import { StockPriceData } from './stock-price-data';
-
-export const modernaStockPriceData: StockPriceData = {
+export const modernaStockPriceData = {
   date: [
     '12/7/2018',
     '12/10/2018',

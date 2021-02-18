@@ -8,23 +8,23 @@ declare var Plotly: any;
 })
 export class ChartDemoComponent implements OnInit {
   @ViewChild('Graph', { static: true })
-  private Graph: ElementRef;
+  private Graph: ElementRef | undefined;
 
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.Graph);
-    Plotly.newPlot(
-      this.Graph.nativeElement,
-      [
+    if (this.Graph)
+      Plotly.newPlot(
+        this.Graph.nativeElement,
+        [
+          {
+            x: [1, 2, 3, 4, 5],
+            y: [1, 2, 4, 8, 16],
+          },
+        ],
         {
-          x: [1, 2, 3, 4, 5],
-          y: [1, 2, 4, 8, 16],
-        },
-      ],
-      {
-        margin: { t: 0 },
-      }
-    );
+          margin: { t: 0 },
+        }
+      );
   }
 }

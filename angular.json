@@ -29,7 +29,9 @@
               "node_modules/jquery/dist/jquery.js",
               "node_modules/materialize-css/dist/js/materialize.min.js",
               "./node_modules/plotly.js/dist/plotly.min.js",
-              "./node_modules/chart.js/dist/Chart.bundle.min.js"
+              "./node_modules/chart.js/dist/Chart.bundle.min.js",
+              "./node_modules/hammerjs/hammer.min.js",
+              "./node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"
             ]
           },
           "configurations": {

@@ -76,7 +76,7 @@ const baseDataset = {
 })
 export class ModernaStockPriceComponent implements OnInit {
   // private _data: (number | number[])[] | ChartPoint[];
-  private _chart: Chart;
+  private _chart: Chart | undefined;
 
   showCharts = {
     opening: true,
@@ -115,9 +115,9 @@ export class ModernaStockPriceComponent implements OnInit {
     let dataset: ChartDataSets;
 
     Object.entries(chartsSettings).forEach(
-      ([chartTag, props]: [ChartTag, Setting]) => {
+      ([chartTag, props]: [string, Setting]) => {
         // The chart is not displayed
-        if (!this.showCharts[chartTag]) {
+        if (!this.showCharts[chartTag as ChartTag]) {
           return;
         }
 
@@ -125,7 +125,7 @@ export class ModernaStockPriceComponent implements OnInit {
         dataset = {
           ...baseDataset,
           ...props,
-          data: this.getFormattedData(chartTag),
+          data: this.getFormattedData(chartTag as ChartTag),
         };
 
         // Registers the chart's dataset
@@ -138,6 +138,9 @@ export class ModernaStockPriceComponent implements OnInit {
 
   toggleChart(chartTag: ChartTag): void {
     this.showCharts[chartTag] = !this.showCharts[chartTag];
+    if (!this._chart) {
+      throw new Error('Chart is undefined');
+    }
     this._chart.data.datasets = this.getDatasets();
     this._chart.update();
   }

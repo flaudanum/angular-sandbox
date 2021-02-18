@@ -54,9 +54,9 @@ export class AuthenticationService {
     });
   }
 
-  private getStorageName(name: string) {
+  private getStorageName(name: string): string {
     if (AuthenticationService.webStorageNames.has(name)) {
-      return AuthenticationService.webStorageNames.get(name);
+      return AuthenticationService.webStorageNames.get(name) as string;
     } else {
       throw Error(`Unregistered web storage name: ${name}`);
     }
@@ -89,7 +89,9 @@ export class AuthenticationService {
 
   private checkTokenInStorage(subscriber: Subscriber<boolean>) {
     const authData = <AuthStorageModel>(
-      JSON.parse(this.storageService.getItem(this.getStorageName('AUTH')))
+      JSON.parse(
+        this.storageService.getItem(this.getStorageName('AUTH')) ?? '{}'
+      )
     );
     if (this.checkToken(authData.token)) {
       subscriber.next(true);

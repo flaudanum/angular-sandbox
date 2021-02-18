@@ -31,11 +31,11 @@ export class SignInComponent implements OnInit {
       )
       .subscribe((event) => {
         const initialUrl = this.router
-          .getCurrentNavigation()
-          .initialUrl?.toString();
+          ?.getCurrentNavigation()
+          ?.initialUrl?.toString();
         const finalUrl = this.router
-          .getCurrentNavigation()
-          .finalUrl?.toString();
+          ?.getCurrentNavigation()
+          ?.finalUrl?.toString();
 
         const isNavigated: boolean =
           event instanceof NavigationEnd && finalUrl === '/sign-in';

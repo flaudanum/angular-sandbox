@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PlotlyHTMLElement } from 'plotly.js';
 declare var Plotly: any;
 
 @Component({
@@ -13,7 +14,7 @@ export class ChartDemoComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (this.Graph)
+    if (this.Graph) {
       Plotly.newPlot(
         this.Graph.nativeElement,
         [
@@ -25,6 +26,9 @@ export class ChartDemoComponent implements OnInit {
         {
           margin: { t: 0 },
         }
-      );
+      ).then((elt: PlotlyHTMLElement) => {
+        console.log('Plotly element:', elt);
+      });
+    }
   }
 }

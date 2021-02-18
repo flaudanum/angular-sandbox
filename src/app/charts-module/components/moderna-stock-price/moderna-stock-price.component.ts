@@ -230,7 +230,7 @@ export class ModernaStockPriceComponent implements OnInit {
       min: datesRange[0],
       max: datesRange[1],
     };
-    (options.scales?.yAxes as ChartXAxe[])[0].ticks = {
+    (options.scales?.yAxes as ChartYAxe[])[0].ticks = {
       min: 0,
       max: priceUpperBound,
     };
